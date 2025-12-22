@@ -66,6 +66,7 @@ Because the Gaussian model applied the wrong mathematical assumption to the data
    ```bash
 pip install pandas nltk scikit-learn contractions
 Run the Notebook: Launch Jupyter Lab or Notebook to view the Sentiment_Analysis.ipynb file.
+```
 
 ##🔮 Future Scope
 Deep Learning Integration: Implement an LSTM or BERT-based model to capture sequential context better than Bag-of-Words approaches.
