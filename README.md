@@ -68,7 +68,7 @@ pip install pandas nltk scikit-learn contractions
 Run the Notebook: Launch Jupyter Lab or Notebook to view the Sentiment_Analysis.ipynb file.
 ```
 
-##🔮 Future Scope
+## 🔮 Future Scope
 Deep Learning Integration: Implement an LSTM or BERT-based model to capture sequential context better than Bag-of-Words approaches.
 
 API Deployment: Wrap the inference engine in a Flask/FastAPI container to allow real-time sentiment scoring of new reviews.
