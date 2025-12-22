@@ -62,14 +62,12 @@ Because the Gaussian model applied the wrong mathematical assumption to the data
    ```bash
    git clone [https://github.com/yourusername/kindle-sentiment-analysis.git](https://github.com/yourusername/kindle-sentiment-analysis.git)
    cd kindle-sentiment-analysis
-Install dependencies:
-
-Bash
-
+2.**Install dependencies:**
+   ```bash
 pip install pandas nltk scikit-learn contractions
 Run the Notebook: Launch Jupyter Lab or Notebook to view the Sentiment_Analysis.ipynb file.
 
-🔮 Future Scope
+##🔮 Future Scope
 Deep Learning Integration: Implement an LSTM or BERT-based model to capture sequential context better than Bag-of-Words approaches.
 
 API Deployment: Wrap the inference engine in a Flask/FastAPI container to allow real-time sentiment scoring of new reviews.
