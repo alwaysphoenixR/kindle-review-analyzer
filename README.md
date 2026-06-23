@@ -1,0 +1,76 @@
+<img width="100%" alt="kindle_excalidraw" src="https://github.com/user-attachments/assets/2b81d782-10dc-447e-af1c-b9104689feed" />
+
+# 📚 NLP Sentiment Analysis Engine (Kindle Reviews)
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Library](https://img.shields.io/badge/Library-Scikit--Learn-orange)
+![Library](https://img.shields.io/badge/Library-NLTK-green)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+
+## 📋 Executive Summary
+This project implements an automated customer satisfaction classification system using Natural Language Processing (NLP). By analyzing 12,000 Amazon Kindle reviews, the system converts unstructured text data into actionable binary sentiment signals (High vs. Low Satisfaction).
+
+The final Multinomial Naive Bayes model achieved **85.2% accuracy** on a perfectly balanced dataset, effectively identifying positive and negative sentiment by leveraging a robust preprocessing pipeline and TF-IDF vectorization.
+
+## ⚙️ Key Technical Decisions
+To ensure model reliability and engineering rigor, several specific design choices were made:
+
+* **Binary Classification Reframing:** Instead of predicting a specific 1-5 star rating, the problem was reframed to answer the core business question: *"Is the customer happy?"*
+    * **Positive (1):** Ratings 4 & 5
+    * **Negative (0):** Ratings 1, 2, & 3
+* **Dataset Balancing:** The dataset was curated to contain exactly 6,000 positive and 6,000 negative samples. This eliminated the need for synthetic oversampling techniques (like SMOTE) and ensured accuracy metrics were not skewed by a majority class.
+* **Handling Negations:** A custom contraction expansion step was implemented (e.g., converting *"don't"* → *"do not"*). This prevents the loss of semantic meaning during stopword removal, ensuring negative sentiments aren't flipped.
+* **Lemmatization vs. Stemming:** `WordNetLemmatizer` was chosen over Stemming.
+    * *Reasoning:* Stemming often truncates words aggressively (e.g., *better* → *bet*), losing meaning. Lemmatization reduces words to their valid dictionary root (*better* → *good*), preserving the semantic value necessary for accurate sentiment analysis.
+
+## 🚀 Methodology & Pipeline
+
+### 1. Preprocessing (The Cleaner)
+Raw text data undergoes a rigorous cleaning pipeline:
+1.  **Lowercasing & HTML Removal:** Standardizing text format.
+2.  **Contraction Expansion:** Using the `contractions` library to fix negations.
+3.  **Tokenization & Cleaning:** Removing punctuation and numbers.
+4.  **Lemmatization:** Reducing tokens to their root form.
+
+### 2. Feature Engineering
+* **Signal Maximization:** Created a `combined_summary_review` feature by merging the review summary (high-density signal) with the full review body (context).
+
+### 3. Vectorization Strategies
+Two vectorization techniques were compared to transform text into numerical input:
+* **Bag-of-Words (CountVectorizer):** Simple frequency counting.
+* **TF-IDF (Term Frequency-Inverse Document Frequency):** Weighs unique, informative words higher while penalizing common words that appear everywhere (e.g., "book", "read").
+
+## 📊 Performance & Analysis
+
+Three distinct model variants were tested. The Multinomial Naive Bayes with TF-IDF was the clear winner.
+
+| Model Variant | Vectorizer | Accuracy | Status |
+| :--- | :--- | :--- | :--- |
+| **Multinomial NB** | **TF-IDF** | **85.2%** | **🏆 Champion** |
+| Multinomial NB | Bag-of-Words | 85.1% | Effective |
+| Gaussian NB | TF-IDF | ~65% | Failed |
+| Gaussian NB | Bag-of-Words | ~62% | Failed |
+
+### 🔍 Technical Analysis: Why did Gaussian NB fail?
+Gaussian Naive Bayes assumes that features follow a Normal (Bell curve) distribution. However, text data (word counts and TF-IDF scores) is **discrete** and sparse, fitting a Multinomial distribution rather than a Gaussian one.
+
+Because the Gaussian model applied the wrong mathematical assumption to the data structure, it failed to capture the pattern, resulting in near-random performance. Multinomial NB, designed specifically for discrete counts, correctly modeled the word frequency probability.
+
+## 💻 Installation & Usage
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/yourusername/kindle-sentiment-analysis.git](https://github.com/yourusername/kindle-sentiment-analysis.git)
+   cd kindle-sentiment-analysis
+2.**Install dependencies:**
+   ```bash
+pip install pandas nltk scikit-learn contractions
+Run the Notebook: Launch Jupyter Lab or Notebook to view the Sentiment_Analysis.ipynb file.
+```
+
+## 🔮 Future Scope
+Deep Learning Integration: Implement an LSTM or BERT-based model to capture sequential context better than Bag-of-Words approaches.
+
+API Deployment: Wrap the inference engine in a Flask/FastAPI container to allow real-time sentiment scoring of new reviews.
+
+Granularity: Experiment with multi-class classification to predict specific star ratings (1-5) rather than just binary sentiment.
