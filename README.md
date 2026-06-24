@@ -1,76 +1,483 @@
-<img width="100%" alt="kindle_excalidraw" src="https://github.com/user-attachments/assets/2b81d782-10dc-447e-af1c-b9104689feed" />
+# FeedbackIQ
 
-# 📚 NLP Sentiment Analysis Engine (Kindle Reviews)
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Library](https://img.shields.io/badge/Library-Scikit--Learn-orange)
-![Library](https://img.shields.io/badge/Library-NLTK-green)
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+### Transform Customer Reviews into Actionable Insights with AI
 
-## 📋 Executive Summary
-This project implements an automated customer satisfaction classification system using Natural Language Processing (NLP). By analyzing 12,000 Amazon Kindle reviews, the system converts unstructured text data into actionable binary sentiment signals (High vs. Low Satisfaction).
+FeedbackIQ is an AI-powered review intelligence platform that analyzes large-scale customer feedback and converts raw reviews into meaningful business insights using Natural Language Processing (NLP).
 
-The final Multinomial Naive Bayes model achieved **85.2% accuracy** on a perfectly balanced dataset, effectively identifying positive and negative sentiment by leveraging a robust preprocessing pipeline and TF-IDF vectorization.
+[![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?logo=node.js)](https://nodejs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-ML_Service-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb)](https://www.mongodb.com/)
+[![Accuracy](https://img.shields.io/badge/Model_Accuracy-88.54%25-orange)](#model-performance)
 
-## ⚙️ Key Technical Decisions
-To ensure model reliability and engineering rigor, several specific design choices were made:
+</div>
 
-* **Binary Classification Reframing:** Instead of predicting a specific 1-5 star rating, the problem was reframed to answer the core business question: *"Is the customer happy?"*
-    * **Positive (1):** Ratings 4 & 5
-    * **Negative (0):** Ratings 1, 2, & 3
-* **Dataset Balancing:** The dataset was curated to contain exactly 6,000 positive and 6,000 negative samples. This eliminated the need for synthetic oversampling techniques (like SMOTE) and ensured accuracy metrics were not skewed by a majority class.
-* **Handling Negations:** A custom contraction expansion step was implemented (e.g., converting *"don't"* → *"do not"*). This prevents the loss of semantic meaning during stopword removal, ensuring negative sentiments aren't flipped.
-* **Lemmatization vs. Stemming:** `WordNetLemmatizer` was chosen over Stemming.
-    * *Reasoning:* Stemming often truncates words aggressively (e.g., *better* → *bet*), losing meaning. Lemmatization reduces words to their valid dictionary root (*better* → *good*), preserving the semantic value necessary for accurate sentiment analysis.
+---
 
-## 🚀 Methodology & Pipeline
+## Demo
 
-### 1. Preprocessing (The Cleaner)
-Raw text data undergoes a rigorous cleaning pipeline:
-1.  **Lowercasing & HTML Removal:** Standardizing text format.
-2.  **Contraction Expansion:** Using the `contractions` library to fix negations.
-3.  **Tokenization & Cleaning:** Removing punctuation and numbers.
-4.  **Lemmatization:** Reducing tokens to their root form.
+> Add your project GIF here once available.
 
-### 2. Feature Engineering
-* **Signal Maximization:** Created a `combined_summary_review` feature by merging the review summary (high-density signal) with the full review body (context).
-
-### 3. Vectorization Strategies
-Two vectorization techniques were compared to transform text into numerical input:
-* **Bag-of-Words (CountVectorizer):** Simple frequency counting.
-* **TF-IDF (Term Frequency-Inverse Document Frequency):** Weighs unique, informative words higher while penalizing common words that appear everywhere (e.g., "book", "read").
-
-## 📊 Performance & Analysis
-
-Three distinct model variants were tested. The Multinomial Naive Bayes with TF-IDF was the clear winner.
-
-| Model Variant | Vectorizer | Accuracy | Status |
-| :--- | :--- | :--- | :--- |
-| **Multinomial NB** | **TF-IDF** | **85.2%** | **🏆 Champion** |
-| Multinomial NB | Bag-of-Words | 85.1% | Effective |
-| Gaussian NB | TF-IDF | ~65% | Failed |
-| Gaussian NB | Bag-of-Words | ~62% | Failed |
-
-### 🔍 Technical Analysis: Why did Gaussian NB fail?
-Gaussian Naive Bayes assumes that features follow a Normal (Bell curve) distribution. However, text data (word counts and TF-IDF scores) is **discrete** and sparse, fitting a Multinomial distribution rather than a Gaussian one.
-
-Because the Gaussian model applied the wrong mathematical assumption to the data structure, it failed to capture the pattern, resulting in near-random performance. Multinomial NB, designed specifically for discrete counts, correctly modeled the word frequency probability.
-
-## 💻 Installation & Usage
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/yourusername/kindle-sentiment-analysis.git](https://github.com/yourusername/kindle-sentiment-analysis.git)
-   cd kindle-sentiment-analysis
-2.**Install dependencies:**
-   ```bash
-pip install pandas nltk scikit-learn contractions
-Run the Notebook: Launch Jupyter Lab or Notebook to view the Sentiment_Analysis.ipynb file.
+```text
+assets/
+└── feedbackiq-demo.gif
 ```
 
-## 🔮 Future Scope
-Deep Learning Integration: Implement an LSTM or BERT-based model to capture sequential context better than Bag-of-Words approaches.
+```md
+![FeedbackIQ Demo](assets/feedbackiq-demo.gif)
+```
 
-API Deployment: Wrap the inference engine in a Flask/FastAPI container to allow real-time sentiment scoring of new reviews.
+---
 
-Granularity: Experiment with multi-class classification to predict specific star ratings (1-5) rather than just binary sentiment.
+## Problem Statement
+
+Modern businesses receive thousands of customer reviews across marketplaces, applications, and digital platforms.
+
+Manually analyzing this feedback is:
+
+- Time-consuming
+- Expensive
+- Error-prone
+- Difficult to scale
+
+FeedbackIQ automates this process by leveraging machine learning and topic modeling to identify customer sentiment, uncover recurring themes, and generate actionable insights within minutes.
+
+---
+
+## Features
+
+### CSV-Based Review Analysis
+
+Upload customer review datasets directly through a simple interface.
+
+### Sentiment Analysis
+
+Classify reviews and understand overall customer satisfaction.
+
+- Positive Reviews
+- Negative Reviews
+- Neutral Reviews
+
+### Topic Extraction
+
+Discover recurring customer concerns and feedback patterns using BERTopic.
+
+Examples:
+
+- Battery Life Issues
+- Customer Support Complaints
+- Delivery Delays
+- Product Quality Concerns
+
+### Interactive Analytics Dashboard
+
+Visualize:
+
+- Sentiment Distribution
+- Review Statistics
+- Topic Insights
+- Historical Reports
+
+### Report Management
+
+- View Previous Reports
+- Access Historical Analysis
+- Delete Reports
+- Compare Review Data Over Time
+
+### Statistics Endpoint
+
+Track platform-level metrics:
+
+- Total Reports Generated
+- Total Reviews Analyzed
+- Average Positive Sentiment
+
+---
+
+## How It Works
+
+```text
+User Uploads CSV
+        │
+        ▼
+Frontend (React)
+        │
+        ▼
+Backend API (Express.js)
+        │
+        ▼
+ML Service (FastAPI)
+        │
+ ┌──────┴──────┐
+ ▼             ▼
+Sentiment   Topic
+Analysis   Extraction
+(Logistic   (BERTopic)
+Regression)
+        │
+        ▼
+MongoDB
+        │
+        ▼
+Analytics Dashboard
+```
+
+---
+
+## Architecture
+
+```text
+┌─────────────────────┐
+│     React App       │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   Express Backend   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  FastAPI ML Service │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│      MongoDB        │
+└─────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- React
+- Vite
+- Axios
+- React Router
+- Modern Responsive UI
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Multer
+
+### Machine Learning
+
+- FastAPI
+- Scikit-Learn
+- TF-IDF Vectorization
+- Logistic Regression
+- BERTopic
+- Pandas
+- NumPy
+
+---
+
+## Machine Learning Pipeline
+
+### Sentiment Analysis
+
+The sentiment engine is built using:
+
+- Text Preprocessing
+- TF-IDF Vectorization
+- Logistic Regression Classifier
+
+#### Model Performance
+
+| Model | Accuracy |
+|---------|---------:|
+| Logistic Regression | **88.54%** |
+
+### Training Dataset
+
+The model was trained on a custom combined dataset sourced from:
+
+- Amazon Reviews
+- IBM Customer Feedback
+- Google Play Store Reviews
+
+This combination improves the model's ability to generalize across multiple review domains.
+
+---
+
+## Topic Modeling
+
+FeedbackIQ uses BERTopic to identify recurring themes from customer feedback.
+
+Example:
+
+### Input Reviews
+
+```text
+Battery drains quickly.
+Battery backup is poor.
+The phone only lasts a few hours.
+```
+
+### Generated Topic
+
+```text
+Battery Life Issues
+```
+
+---
+
+## CSV Format
+
+Your CSV file must contain a column named:
+
+```csv
+review
+Amazing product
+Battery life is terrible
+Customer support was very helpful
+```
+
+### Important
+
+The column name must be exactly:
+
+```text
+review
+```
+
+Not:
+
+```text
+Review
+REVIEWS
+customer_review
+feedback
+```
+
+---
+
+## API Endpoints
+
+### Upload Reviews
+
+```http
+POST /upload
+```
+
+Uploads and validates CSV data.
+
+---
+
+### Create Report
+
+```http
+POST /reports
+```
+
+Creates a new analysis report.
+
+---
+
+### Get All Reports
+
+```http
+GET /reports
+```
+
+Returns all generated reports.
+
+---
+
+### Get Report By ID
+
+```http
+GET /reports/:id
+```
+
+Returns detailed report information.
+
+---
+
+### Delete Report
+
+```http
+DELETE /reports/:id
+```
+
+Removes a report.
+
+---
+
+### Statistics
+
+```http
+GET /reports/stats
+```
+
+Example Response:
+
+```json
+{
+  "totalReports": 12,
+  "totalReviewsAnalyzed": 15432,
+  "averagePositivePercentage": 78.4
+}
+```
+
+---
+
+## Project Structure
+
+```text
+FEEDBACKIQ/
+│
+├── frontend/
+│
+├── backend/
+│
+├── ml/
+│
+├── assets/
+│   └── feedbackiq-demo.gif
+│
+└── README.md
+```
+
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/alwaysphoenixR/FEEDBACKIQ.git
+cd FEEDBACKIQ
+```
+
+---
+
+### Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+### Backend Setup
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+---
+
+### ML Service Setup
+
+```bash
+cd ml
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
+```
+
+---
+
+## Environment Variables
+
+### Backend
+
+```env
+PORT=
+MONGO_URI=
+ML_SERVICE_URL=
+```
+
+### ML Service
+
+```env
+MODEL_PATH=
+```
+
+---
+
+## User Experience
+
+FeedbackIQ is designed to make large-scale review analysis effortless.
+
+While reviews are being processed, users are shown a friendly waiting screen:
+
+> “Analyzing reviews... This may take a while. Brew a coffee ☕ while FeedbackIQ works.”
+
+---
+
+## Future Improvements
+
+- Aspect-Based Sentiment Analysis
+- Multi-language Support
+- Comparative Report Analysis
+- PDF Report Export
+- AI-Powered Recommendations
+- Trend Analysis Over Time
+- Real-Time Review Monitoring
+- LLM-Based Insight Generation
+
+---
+
+## Why FeedbackIQ?
+
+FeedbackIQ demonstrates:
+
+### Frontend Engineering
+
+- React Development
+- API Integration
+- Responsive Dashboard Design
+
+### Backend Engineering
+
+- REST API Development
+- File Upload Handling
+- Database Design
+- Service-Oriented Architecture
+
+### Machine Learning
+
+- NLP Pipelines
+- Sentiment Analysis
+- Topic Modeling
+- FastAPI Deployment
+
+### System Design
+
+- Frontend ↔ Backend ↔ ML Communication
+- Multi-Service Architecture
+- Production-Oriented Design
+
+---
+
+## Author
+
+**Rajveer Singh**
+
+Computer Science & Engineering  
+NIT Raipur
+
+---
+
+## Star the Repository
+
+If you found this project useful, consider giving it a star.
+
+It helps support the project and motivates future improvements.
