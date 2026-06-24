@@ -1,6 +1,17 @@
-import ollama
 import json
 import re
+import os
+
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
+)
+
+
 def analyze_topic(topic_id, topic_model):
 
     keywords = [
@@ -47,18 +58,21 @@ Rules:
 - Focus on product improvements.
 """
 
-    response = ollama.chat(
-        model="qwen2.5:1.5b",
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
-        ]
+        ],
+        temperature=0.2,
+        max_tokens=300
     )
 
-    text = response["message"]["content"]
-    # remove markdown code fences
+    text = response.choices[0].message.content
+
+    # remove markdown code fences if model returns them
     text = re.sub(r"```json", "", text)
     text = re.sub(r"```", "", text)
     text = text.strip()
@@ -73,14 +87,16 @@ Rules:
         }
 
     except Exception as e:
-     return {
-        "topic_id": topic_id,
-        "count": count,
-        "error": str(e),
-        "raw_response": text
-    }
+
+        return {
+            "topic_id": topic_id,
+            "count": count,
+            "error": str(e),
+            "raw_response": text
+        }
+
+
 def generate_insights(topic_model, top_n=5):
-    print(topic_model.get_topic_info())
 
     topic_info = topic_model.get_topic_info()
 
