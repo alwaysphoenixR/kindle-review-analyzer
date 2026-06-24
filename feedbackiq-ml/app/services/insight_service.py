@@ -87,13 +87,13 @@ Rules:
         }
 
     except Exception as e:
-
-        return {
-            "topic_id": topic_id,
-            "count": count,
-            "error": str(e),
-            "raw_response": text
-        }
+         return {
+        "topic_id": topic_id,
+        "count": count,
+        "theme": "Unknown Issue",
+        "summary": "Unable to generate summary",
+        "recommendation": "Review customer feedback manually"
+    }
 
 
 def generate_insights(topic_model, top_n=5):
