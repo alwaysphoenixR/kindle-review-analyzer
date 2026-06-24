@@ -1,23 +1,25 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: "https://kindle-review-analyzer.onrender.com/",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 export const uploadCSV = async (file, onProgress) => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
 
-  const response = await api.post('/upload', formData, {
+  const response = await api.post("/upload", formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
     onUploadProgress: (progressEvent) => {
       if (onProgress && progressEvent.total) {
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total,
+        );
         onProgress(percentCompleted);
       }
     },
@@ -26,7 +28,7 @@ export const uploadCSV = async (file, onProgress) => {
 };
 
 export const fetchReports = async () => {
-  const response = await api.get('/report');
+  const response = await api.get("/report");
   return response.data;
 };
 
@@ -41,7 +43,7 @@ export const deleteReport = async (id) => {
 };
 
 export const fetchStats = async () => {
-  const response = await api.get('/report/stats');
+  const response = await api.get("/report/stats");
   return response.data;
 };
 
